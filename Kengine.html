@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%234285F4%22 font-family=%22Arial%22 font-weight=%22bold%22>K</text></svg>">
+    
+    <title id="tab-title">Kengine</title>
+    
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            overflow: hidden;
+        }
+
+        /* Turbo Loading Screen */
+        #loader {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: white;
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-wrapper { text-align: center; margin-bottom: 30px; }
+        .logo { font-size: 92px; font-weight: bold; letter-spacing: -3px; margin: 0; user-select: none; }
+        .slogan { font-size: 16px; color: #70757a; margin-top: -5px; font-style: italic; }
+        
+        .blue { color: #4285F4; } .red { color: #EA4335; } .yellow { color: #FBBC05; } .green { color: #34A853; }
+
+        .search-container { width: 90%; max-width: 584px; text-align: center; position: relative; }
+        
+        .search-box {
+            width: 100%; padding: 12px 20px; font-size: 16px;
+            border: 1px solid #dfe1e5; border-radius: 24px; outline: none;
+            transition: box-shadow 0.2s; box-sizing: border-box;
+        }
+        .search-box:focus { box-shadow: 0 1px 6px rgba(32,33,36,0.28); }
+
+        /* Custom Dropdown Styling */
+        .custom-select-wrapper {
+            position: relative;
+            margin: 15px auto;
+            width: 220px;
+            user-select: none;
+        }
+        .custom-select {
+            display: flex; align-items: center; justify-content: center;
+            padding: 10px 15px; border: 1px solid #dfe1e5; border-radius: 20px;
+            background: #fff; cursor: pointer; font-size: 14px; gap: 10px;
+        }
+        .custom-select:hover { background: #f8f9fa; }
+        
+        .custom-options {
+            display: none; position: absolute; top: 110%; left: 0; right: 0;
+            background: #fff; border: 1px solid #dfe1e5; border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 50; overflow: hidden;
+        }
+        .custom-options.open { display: block; }
+        
+        .option {
+            display: flex; align-items: center; padding: 10px 15px;
+            cursor: pointer; gap: 10px; font-size: 14px;
+        }
+        .option:hover { background: #f1f3f4; }
+        .option img { width: 18px; height: 18px; object-fit: contain; }
+
+        .button-row { margin-top: 10px; }
+        .btn {
+            background-color: #f8f9fa; border: 1px solid #f8f9fa; border-radius: 4px;
+            color: #3c4043; font-size: 14px; margin: 5px; padding: 0 16px;
+            height: 36px; cursor: pointer; line-height: 34px;
+        }
+        .btn:hover { border: 1px solid #dadce0; color: #202124; }
+
+        /* Footer Links & Copyright */
+        .footer-left {
+            position: absolute; bottom: 15px; left: 20px;
+        }
+        .download-link {
+            text-decoration: none;
+            color: #4285F4;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 8px 15px;
+            border: 1px solid #4285F4;
+            border-radius: 20px;
+            transition: all 0.2s;
+        }
+        .download-link:hover {
+            background-color: #4285F4;
+            color: white;
+        }
+
+        .footer-copyright { position: absolute; bottom: 15px; right: 20px; font-size: 12px; color: #70757a; }
+
+        .loading-bar { width: 250px; height: 6px; background: #f0f0f0; border-radius: 3px; overflow: hidden; margin-top: 20px; }
+        .loading-progress { width: 0%; height: 100%; background: #4285F4; animation: turbo 0.8s forwards; }
+        @keyframes turbo { 0% { width: 0%; } 100% { width: 100%; } }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="logo">
+            <span class="blue">K</span><span class="red">e</span><span class="yellow">n</span><span class="blue">g</span><span class="green">i</span><span class="red">n</span><span class="blue">e</span>
+        </div>
+        <div id="loader-text" style="color: #4285F4; font-weight: bold; margin-top: 20px;">KENGINE TURBO ACTIVATED</div>
+        <div class="loading-bar"><div class="loading-progress"></div></div>
+    </div>
+
+    <div class="brand-wrapper">
+        <div class="logo">
+            <span class="blue">K</span><span class="red">e</span><span class="yellow">n</span><span class="blue">g</span><span class="green">i</span><span class="red">n</span><span class="blue">e</span>
+        </div>
+        <div class="slogan">The fastest search engine</div>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="query" class="search-box" autofocus autocomplete="off" placeholder="Search or ask Kengine...">
+        
+        <div class="custom-select-wrapper">
+            <div class="custom-select" id="selected-engine">
+                <img src="https://www.google.com/favicon.ico" id="current-img">
+                <span id="current-text">Google</span>
+            </div>
+            <div class="custom-options" id="options-list">
+                <div class="option" data-value="google" data-img="https://www.google.com/favicon.ico"><img src="https://www.google.com/favicon.ico"> Google</div>
+                <div class="option" data-value="gemini" data-img="https://www.gstatic.com/lamda/images/favicon_v2_196x196.png"><img src="https://www.gstatic.com/lamda/images/favicon_v2_196x196.png"> Gemini (AI)</div>
+                <div class="option" data-value="duckduckgo" data-img="https://duckduckgo.com/favicon.ico"><img src="https://duckduckgo.com/favicon.ico"> DuckDuckGo</div>
+                <div class="option" data-value="startpage" data-img="https://www.startpage.com/favicon.ico"><img src="https://www.startpage.com/favicon.ico"> Startpage</div>
+                <div class="option" data-value="youtube" data-img="https://www.youtube.com/favicon.ico"><img src="https://www.youtube.com/favicon.ico"> YouTube</div>
+                <div class="option" data-value="wikipedia" data-img="https://en.wikipedia.org/favicon.ico"><img src="https://en.wikipedia.org/favicon.ico"> Wikipedia</div>
+            </div>
+        </div>
+
+        <div class="button-row">
+            <button class="btn" onclick="executeSearch()">Kengine Search</button>
+            <button class="btn" onclick="location.href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'">I'm Feeling Lucky</button>
+        </div>
+    </div>
+
+    <div class="footer-left">
+        <a href="https://drive.usercontent.google.com/u/0/uc?id=1Ae798vZ6eRFIdl4W0Rx-bEabcSDPOr4m&export=download" class="download-link">Download the App!</a>
+    </div>
+
+    <div class="footer-copyright">Copyright Kürsat alper can</div>
+
+    <script>
+        let selectedValue = "google";
+        const customSelect = document.getElementById('selected-engine');
+        const optionsList = document.getElementById('options-list');
+
+        customSelect.addEventListener('click', () => optionsList.classList.toggle('open'));
+
+        document.querySelectorAll('.option').forEach(opt => {
+            opt.addEventListener('click', function() {
+                selectedValue = this.getAttribute('data-value');
+                document.getElementById('current-img').src = this.getAttribute('data-img');
+                document.getElementById('current-text').innerText = this.innerText;
+                optionsList.classList.remove('open');
+            });
+        });
+
+        function executeSearch() {
+            const query = document.getElementById('query').value;
+            if (!query) return;
+
+            document.getElementById('loader-text').innerText = (selectedValue === 'gemini') ? "KENGINE AI MODE ACTIVATED" : "KENGINE TURBO ACTIVATED";
+            document.getElementById('loader').style.display = 'flex';
+
+            const urls = {
+                google: "https://www.google.com/search?q=",
+                gemini: "https://gemini.google.com/app?q=",
+                duckduckgo: "https://duckduckgo.com/?q=",
+                startpage: "https://www.startpage.com/sp/search?query=",
+                youtube: "https://www.youtube.com/results?search_query=",
+                wikipedia: "https://en.wikipedia.org/wiki/Special:Search?search="
+            };
+
+            setTimeout(() => {
+                window.location.href = urls[selectedValue] + encodeURIComponent(query);
+            }, 800);
+        }
+
+        document.getElementById('query').addEventListener('keypress', (e) => { if (e.key === 'Enter') executeSearch(); });
+
+        document.addEventListener('visibilitychange', () => {
+            document.title = document.hidden ? "We are still fast" : "Kengine";
+        });
+        
+        window.addEventListener('click', (e) => {
+            if (!document.querySelector('.custom-select-wrapper').contains(e.target)) optionsList.classList.remove('open');
+        });
+    </script>
+</body>
+</html>
